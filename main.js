@@ -26,6 +26,53 @@ getAllBtn.addEventListener('click', () => { // .then only runs the funciton if y
   }) 
 })
 
+createForm.addEventListener('submit', (event) => {
+  event.preventDefault();
+
+  let maBod = {
+    firstName: newFirstInput.value, 
+    lastName: newLastInput.value, 
+    gender: newGenderDropDown.value,
+    age: newAgeInput.value, 
+    likes: newLikesText.value.split(',')
+  }
+
+  axios.post(`${baseURL}/character`, maBod)
+  .then((response) => {
+    clearCharacters()
+    for (let i = 0; i < response.data.length; i++) {
+      createCharacterCard(response.data[i]);
+    }
+    newFirstInput.value = "";
+    newLastInput.value = "";
+    newAgeInput.value = "";
+    newLikesText.value = "";
+  })
+  .catch(() => {
+    
+  })
+
+})
+
+const baseURL = 'http://localhost:4000'
+
+ageForm.addEventListener('submit', (event) => {
+  event.preventDefault(); 
+
+  let age = ageInput.value;
+
+  axios.get(`${baseURL}/character?age=${age}`)
+  .then((response) => {
+    clearCharacters()
+    for (let i = 0; i < response.data.length; i++) {
+      createCharacterCard(response.data[i]);
+    }
+  })
+  .catch((error) => {
+
+  })
+})
+
 // if you do a backend log it shows up in the termial
 // if you do a frontend log it shows up in chrome 
 
